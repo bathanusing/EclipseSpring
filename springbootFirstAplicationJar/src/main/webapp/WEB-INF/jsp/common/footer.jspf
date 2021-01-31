@@ -1,0 +1,8 @@
+<%@ include file= "commonJS.jspf" %>
+<script>
+	$('#targetDate').datepicker({
+		format : 'dd/mm/yyyy'
+	});
+</script>
+</body>
+</html>
