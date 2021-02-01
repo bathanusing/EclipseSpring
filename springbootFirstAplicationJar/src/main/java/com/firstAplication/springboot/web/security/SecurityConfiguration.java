@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
@@ -14,16 +13,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	@Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth)
             throws Exception {
-        auth.inMemoryAuthentication()
-            .passwordEncoder(NoOpPasswordEncoder.getInstance())
-        		.withUser("jean").password("dummy")
-                .roles("USER", "ADMIN");
+		auth.inMemoryAuthentication()
+				.passwordEncoder(org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance())
+				.withUser("jean").password("dummy").roles("USER").and().withUser("admin1").password("secret1")
+				.roles("USER", "ADMIN");
     }
 	
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers("/login", "/h2-console/**").permitAll()
-                .antMatchers("/", "/*todo*/**").access("hasRole('USER')").and()
+				.antMatchers("/", "/*todo*/**", "/*surveys*/**").access("hasRole('USER')").and()
                 .formLogin();
         
         http.csrf().disable();
